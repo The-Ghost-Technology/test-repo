@@ -23,5 +23,5 @@ jobs:
         git clone https://github.com/jackpal/Android-Terminal-Emulator.git
         cd Android-Terminal-Emulator
         echo 'ndk.dir=/home/runner/android-ndk' >> local.properties
-        sudo yes | ./tools/install-sdk-packages
+        yes | sudo ./tools/install-sdk-packages
         ./gradlew assembleRelease

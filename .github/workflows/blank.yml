@@ -9,13 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world
-    - name: Test
+    - name: Setup NDK
+      run: |
+        cd /home/runner
+        curl --fail --retry 3 -o android-ndk.zip https://dl.google.com/android/repository/android-ndk-r10e-Linux-x86_64.zip
+        unzip -q android-ndk.zip
+        mv android-ndk-r10e android-ndk
+    - name: BUILD
       run: |
         sudo dpkg --add-architecture i386
         sudo apt update -yq
         sudo apt install -yq zlib1g-dev libssl-dev:i386 zlib1g-dev:i386
         git clone https://github.com/jackpal/Android-Terminal-Emulator.git
         cd Android-Terminal-Emulator
+        echo 'ndk.dir=/home/runner/android-ndk' >> local.properties
+        yes | ./tools/install-sdk-packages
         ./gradlew assembleRelease
